@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Fitness Club</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="users.html">Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="activity-log.html">Activity Log</a>
+                        </li>
+                        <li class="nav-item"></li>
+                            <a class="nav-link text-white" href="Trainers.html">Trainers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="aboutUs.html">About Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid home-background pt-5">
+        <h2>Edit User</h2>
+        <form id="editUserForm">
+            <input type="hidden" id="userIndex">
+            
+            <div class="form-group">
+                <label for="name" class="control-label">Name</label>
+                <input type="text" class="form-control" id="name">
+            </div>
+            <div class="form-group">
+                <label for="age" class="control-label">Age</label>
+                <input type="number" class="form-control" id="age">
+            </div>
+            <div class="form-group">
+                <label for="email" class="control-label">Email</label>
+                <input type="email" class="form-control" id="email">
+            </div>
+            <div class="form-group">
+                <label for="subscriptionType" class="control-label">Subscription Type</label>
+                <input type="text" class="form-control" id="subscriptionType">
+            </div>
+            <div class="form-group">
+                <label for="startDate" class="control-label">Start Date</label>
+                <input type="date" class="form-control" id="startDate">
+            </div>
+            <div class="form-group">
+                <label for="endDate" class="control-label">End Date</label>
+                <input type="date" class="form-control" id="endDate">
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="users.html" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+    <script>
+        // Load user data for editing
+        window.onload = function() {
+            const index = localStorage.getItem('editUserIndex');
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+
+            if (index !== null && users[index]) {
+                const user = users[index];
+
+                // Pre-fill the form with the user's data
+                document.getElementById('userIndex').value = index;
+                document.getElementById('name').value = user.name;
+                document.getElementById('age').value = user.age;
+                document.getElementById('email').value = user.email;
+                document.getElementById('subscriptionType').value = user.subscriptionType;
+                document.getElementById('startDate').value = user.startDate;
+                document.getElementById('endDate').value = user.endDate;
+            }
+        };
+
+        // Save changes to user data
+        document.getElementById('editUserForm').onsubmit = function(event) {
+            event.preventDefault();
+
+            const index = document.getElementById('userIndex').value;
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+
+            // Update the user's data
+            users[index] = {
+                name: document.getElementById('name').value,
+                age: document.getElementById('age').value,
+                email: document.getElementById('email').value,
+                subscriptionType: document.getElementById('subscriptionType').value,
+                startDate: document.getElementById('startDate').value,
+                endDate: document.getElementById('endDate').value
+            };
+
+            // Save the updated users array
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // Redirect back to the users list
+            window.location.href = 'users.html';
+        };
+    </script>
+</body>
+</html>

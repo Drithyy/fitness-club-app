@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Fitness Club</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="users.html">Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="activity-log.html">Activity Log</a>
+                        </li>
+                        <li class="nav-item"></li>
+                            <a class="nav-link text-white" href="Trainers.html">Trainers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="aboutUs.html">About Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid home-background">
+        <h2>Activity Log</h2>
+
+        <a href="activity-create.html" class="btn btn-success float-end">Log Activity</a>
+
+        <div class="d-flex mb-3">
+            <form asp-action="Index" method="get" class="form-inline">
+                <div class="form-group mr-2 pb-2">
+                    <input type="text" name="searchTerm" placeholder="Search by user name" class="form-control" />
+                </div>
+                <button type="button" class="btn btn-primary">Search</button>
+            </form>
+    
+            
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Activity ID</th>
+                    <th>User ID</th>
+                    <th>User Name</th>
+                    <th>Activity Date</th>
+                    <th>Workout Type</th>
+                    <th>Duration (mins)</th>
+                </tr>
+            </thead>
+            <tbody id="activityTableBody">
+                <!-- Activity log entries will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Log Activity Modal -->
+    <div id="logActivityModal" style="display:none;">
+        <h3>Log New Activity</h3>
+        <form onsubmit="saveActivity(event)">
+            <label>User ID:</label>
+            <input type="text" id="userId" required><br>
+            <label>User Name:</label>
+            <input type="text" id="userName" required><br>
+            <label>Activity Date:</label>
+            <input type="date" id="activityDate" required><br>
+            <label>Workout Type:</label>
+            <input type="text" id="workoutType" required><br>
+            <label>Duration (mins):</label>
+            <input type="number" id="duration" required><br><br>
+            <button type="submit">Save Activity</button>
+            <button type="button" onclick="closeModal()">Cancel</button>
+        </form>
+    </div>
+
+    <script>
+        // Default activity data
+        const defaultActivities = [
+            { ActivityId: 1, UserId: 101, UserName: "John Doe", ActivityDate: "2024-11-01", WorkoutType: "Running", Duration: 30 },
+            { ActivityId: 2, UserId: 102, UserName: "Jane Smith", ActivityDate: "2024-11-02", WorkoutType: "Swimming", Duration: 45 },
+            { ActivityId: 3, UserId: 103, UserName: "Mike Johnson", ActivityDate: "2024-11-03", WorkoutType: "Cycling", Duration: 60 },
+            { ActivityId: 4, UserId: 104, UserName: "Emily Davis", ActivityDate: "2024-11-04", WorkoutType: "Yoga", Duration: 40 }
+        ];
+
+        // Load data from localStorage or initialize with default values
+        function loadActivities() {
+            let activities = JSON.parse(localStorage.getItem("activityLog")) || defaultActivities;
+            localStorage.setItem("activityLog", JSON.stringify(activities)); // Save to localStorage if not present
+            renderActivities(activities);
+        }
+
+        // Render activities in the table
+        function renderActivities(activities) {
+            const tbody = document.getElementById("activityTableBody");
+            tbody.innerHTML = ""; // Clear existing rows
+            activities.forEach(activity => {
+                const row = `<tr>
+                    <td>${activity.ActivityId}</td>
+                    <td>${activity.UserId}</td>
+                    <td>${activity.UserName}</td>
+                    <td>${activity.ActivityDate}</td>
+                    <td>${activity.WorkoutType}</td>
+                    <td>${activity.Duration}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // Search function
+        function searchActivities(event) {
+            event.preventDefault();
+            const searchTerm = document.getElementById("searchTerm").value.toLowerCase();
+            const activities = JSON.parse(localStorage.getItem("activityLog")) || [];
+            const filteredActivities = activities.filter(activity =>
+                activity.UserName.toLowerCase().includes(searchTerm)
+            );
+            renderActivities(filteredActivities);
+        }
+
+        // Log a new activity (placeholder function)
+        function logNewActivity() {
+            const activities = JSON.parse(localStorage.getItem("activityLog")) || [];
+            const newActivity = {
+                ActivityId: activities.length + 1,
+                UserId: 105,
+                UserName: "New User",
+                ActivityDate: new Date().toISOString().split("T")[0],
+                WorkoutType: "New Workout",
+                Duration: 50
+            };
+            activities.push(newActivity);
+            localStorage.setItem("activityLog", JSON.stringify(activities));
+            renderActivities(activities);
+        }
+
+        // Initialize the page with data
+        document.addEventListener("DOMContentLoaded", loadActivities);
+    </script>
+
+</body>
+</html>

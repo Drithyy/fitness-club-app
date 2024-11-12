@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users List</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+       <!-- Navbar -->
+       <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Fitness Club</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="users.html">Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="activity-log.html">Activity Log</a>
+                        </li>
+                        <li class="nav-item"></li>
+                            <a class="nav-link text-white" href="Trainers.html">Trainers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="aboutUs.html">About Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="home-background container-fluid pt-3 text-white">
+        <h3>Trainers List</h3>
+        <p>
+            <a href="create-trainer.html" class="btn btn-primary">Create</a>
+        </p>
+        <table class="table table-responsive text-white">
+            <thead class="table-dark">
+                <tr>
+                    <th>Trainer Id</th>
+                    <th>Name</th>
+                    <th>Specialty</th>
+                    <th>Phone Number</th>
+                </tr>
+            </thead>
+            <tbody id="trainerTableBody">
+                <!-- Table rows will be added here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Sample Trainer Data (Hardcoded in localStorage initially)
+        const sampleTrainers = [
+            { TrainerId: 1, Name: "John Doe", Specialty: "Strength Training", PhoneNumber: "+1234567890" },
+            { TrainerId: 2, Name: "Jane Smith", Specialty: "Cardio", PhoneNumber: "+0987654321" },
+            { TrainerId: 3, Name: "Michael Johnson", Specialty: "Yoga", PhoneNumber: "+1122334455" }
+        ];
+
+        // Save the sample data to localStorage if not already saved
+        if (!localStorage.getItem('trainers')) {
+            localStorage.setItem('trainers', JSON.stringify(sampleTrainers));
+        }
+
+        // Function to load trainers from localStorage and populate the table
+        function loadTrainers() {
+            const trainers = JSON.parse(localStorage.getItem('trainers'));
+            const tableBody = document.getElementById('trainerTableBody');
+            tableBody.innerHTML = ''; // Clear existing table data
+
+            trainers.forEach(trainer => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${trainer.TrainerId}</td>
+                    <td>${trainer.Name}</td>
+                    <td>${trainer.Specialty}</td>
+                    <td>${trainer.PhoneNumber}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Call the function to load trainers when the page loads
+        window.onload = loadTrainers;
+
+        // Redirect to Create Trainer page when Create button is clicked
+        document.getElementById('createTrainerBtn').addEventListener('click', function() {
+            window.location.href = 'trainer-create.html'; // Redirect to the create trainer page
+        });
+    </script>
+</body>
+</html>
